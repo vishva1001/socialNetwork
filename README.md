@@ -19,7 +19,7 @@ About files in this repo:
 
  ---search.html:	  landing page of our web app
  
--test.py:			    unit tests fro web app
+-test.py:			    unit tests for the web app
 
 -wsgi.py:		      configuration to run app with wsgi
 
