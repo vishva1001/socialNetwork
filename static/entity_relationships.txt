@@ -1,0 +1,19 @@
+Relationship   	ID1 	Type1	ID2 	Type2
+ STUDIES_WITH	A   	Person	B   	Person
+ FRIENDS_WITH	A   	Person	C   	Person
+ FRIENDS_WITH	B   	Person	C   	Person
+ ATTENDS     	A   	Person	X   	School
+ ATTENDS     	B   	Person	X   	School
+ BELONGS_TO  	X   	School	Y   	District
+ PLAYS_FOR   	C   	Person	Q   	Team
+ FRIENDS_WITH	C   	Person	G   	Person
+ FRIENDS_WITH	G   	Person	H   	Person
+ FRIENDS_WITH	H   	Person	K   	Person
+ FRIENDS_WITH	Z   	Person	I   	Person
+ FRIENDS_WITH	I   	Person	K   	Person
+ DRIVES      	B   	Person 	M   	Car
+ FRIENDS_WITH	A   	Person	J   	Person
+ FRIENDS_WITH	J   	Person	K   	Person
+ FRIENDS_WITH	D   	Person	L   	Person
+ FRIENDS_WITH	L   	Person	K   	Person
+
