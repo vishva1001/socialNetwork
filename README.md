@@ -3,8 +3,7 @@ Neo4j, Flask, Gunicorn
 
 This is a web application running on an AWS EC2 instance, deployed on Gunicorn standalone WSGI server 
 
-
-to visit the app, go to this url "http://13.58.210.215:5000/"
+**to visit the app, go to this url "http://13.58.210.215:5000/"**
 
 
 About files in this repo:
