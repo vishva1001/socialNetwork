@@ -27,22 +27,23 @@
   <div style="border:1px solid grey; padding:20px;">
     <font size=4>
       <p>On this page:</p>
-      <a href="#overview">1. Overview of the network</a><br>
-      <p><font size = 3>&emsp; &#9432 This section provides a visual representation of the social network and categories(labels) of entities</font></p>
+      <a href="#overview">1. Overview of the network structure</a><br>
+      <p><font size = 3>&emsp; &#9432 This section provides a representation of the structure of the network</font></p>
       <a href="#search">2. Entity Search</a><br>
       <p><font size = 3>&emsp; &#9432 Find entities by putting in a combination of one or more of these: label, property, value.<br>&emsp;&emsp;Check the fuzzy match checkbox to allow approximate matches on the value of property<br>&emsp;&emsp;*Note: Exact match is case sensitive. If you wish to ignore case, please allow fuzzy search</font></p>
       <a href="#cliques">3. Cliques</a><br>
-      <p><font size = 3>&emsp; &#9432 Find the subset of entities, such that any two distinct entities within the subset are related</font></p>
+      <p><font size = 3>&emsp; &#9432 Thsi section enlists the subset of entities, such that any two distinct entities within the subset are related</font></p>
       </font>
   </div>
   
-<h2 id="overview">1. Overview of Social Network</h2>
-<div class="float-container" style="padding-left: 20px; height:500px;">
-<div class="float-child" id="container" style="width: 45%; height:400px; float:left; padding: 20px; border: 1px solid grey;"></div>
-<div class="float-child" id="container2" style="width: 45%; height:250px; float:right; padding: 20px; border: 1px solid grey;"></div>
+<h2 id="overview">1. Overview of the network structure</h2>
+<div class="float-container" style="padding-left: 20px; height:300px;">
+<div class="float-child" id="container" style="width: 45%; height:300px; float:left; border: 1px solid grey;"></div>
+<div class="float-child" id="container2" style="width: 45%; height:250px; float:right; border: 1px solid grey;"></div>
 </div>
   <script >
     anychart.onDocumentLoad(function() {
+      // create network grpah with passed data
       var chart = anychart.graph();
       chart.data(data);
       chart.title('Social Network - All entities');
@@ -83,9 +84,10 @@
         <option value={{k}}>{{k}}</option>
         {% endfor %}
       </select>
-     
+      <!--TEXT FIELD FOR ATTRIBUTE VALUE-->
       <input type="text" name="value" placeholder="Enter Value">
       
+      <!--CHECKBOX TO ALLOW FUZZY MATCH-->
       <input type="checkbox" id="match" name="match" value="fuzzy">
       <label for="match">Fuzzy match</label>
       <br><br>
@@ -93,7 +95,9 @@
       <input type="submit">
     </form>
     <br><br><br>
+    
     {% if res is defined %}
+    <!--IF FILTERED RESULTS EXIST-->
     <script> 
      window.location.href = "#search";
     </script>
@@ -122,6 +126,7 @@
     <br>
     <br>
     <h2 id="cliques">3. Cliques</h2>
+    <!--IDENTIFY GRAPH CLIQUES-->
   <div style="border:1px solid grey; padding:20px;">
     <p><font size=2>&#9432 A clique is a subset of entities, such that any two distinct entities within the subset are related</font></p>
     <p>In our social network, entities with following IDs form a clique:</p>
