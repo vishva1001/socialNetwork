@@ -5,7 +5,7 @@ import networkx as nx
 import os
 
 def connect():
-    driver = GraphDatabase.driver("neo4j+s://8c36a61c.databases.neo4j.io", auth=basic_auth("neo4j","SHcCzmlwObYs_BgJyxVcvT3KkyeA0A1LBkXW8Kt7z7A"))
+    driver = GraphDatabase.driver(os.environ['NEO4J_DB'], auth=basic_auth(os.environ['NEO4J_USR'],os.environ['NEO4J_PWD']))
     return driver
 
 def sessionOpen(driver):
@@ -15,6 +15,7 @@ def sessionOpen(driver):
 def sessionClose(session):
     session.close()
 
+#get all unique labels across all entities
 def getLabels():
     driver = connect()
     session = sessionOpen(driver)
@@ -36,6 +37,7 @@ def getLabels():
     piedata = "["+piedata[:-1]+"]"
     return labels, piedata
 
+#get all distinct keys across all entities
 def getKeys():
     driver = connect()
     session = sessionOpen(driver)
@@ -49,6 +51,7 @@ def getKeys():
     keys=list(set(keys))
     return keys
 
+#get all relationships in the data
 def getGraph():
     driver = connect()
     session = sessionOpen(driver)
@@ -71,6 +74,7 @@ def getGraph():
     graphstring = "{"+nodes+","+edges+"}"
     return allnodes, graphstring
 
+#return node id based on search filters
 def getResults(label, key, value, match):
     driver = connect()
     session = sessionOpen(driver)
@@ -109,6 +113,7 @@ def getResults(label, key, value, match):
     driver.close()
     return res
 
+#find properties and realtions of set of nodes
 def getNodeInfo(results):
     driver = connect()
     session = sessionOpen(driver)
@@ -131,11 +136,12 @@ def getNodeInfo(results):
     driver.close()
     return properties, relations
 
+#return all subsets of graph of size>2, that form a clique
 def getCliques(nodes):
     clqs=[]
     driver = connect()
     session = sessionOpen(driver)
-    file1 = open("edgelist.txt","w")
+    file1 = open("/home/ubuntu/edgelist.txt","w")
     for n in nodes:
         query = "MATCH (a {ID: '"+n+"'})-[r]-(b) RETURN b.ID as ID"
         ids = session.run(query)
@@ -151,7 +157,6 @@ def getCliques(nodes):
     return clqs
 
 app = Flask(__name__)
-print(os.environ['NEO4J_DB'])
 
 @app.route("/")
 def index():
@@ -170,9 +175,12 @@ def search():
 
     if not value:
         value=""
+
     if label is None and value=="" and key is None:
+        #no search filters or parameters applied
         return render_template('search.html', nodes=nodes, labels=labels, keys=keys, cliques=cliques, graphstring=graphstring, piedata=piedata)
     else:
+        #serach filters applied
         results = getResults(label, key, value, match)
         properties, relations = getNodeInfo(results)
         return render_template('search.html', nodes=nodes, labels=labels, keys=keys, res=results, props=properties, rels=relations, cliques=cliques, graphstring=graphstring, piedata=piedata)
