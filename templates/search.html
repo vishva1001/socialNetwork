@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-graph.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-pie.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-base.min.js"></script>
+
+    <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }   
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    </style>
+    </head>
+
+<body style="margin:6%">
+  <div style="border:1px solid grey; padding:20px;">
+    <font size=4>
+      <p>On this page:</p>
+      <a href="#overview">1. Overview of the network</a><br>
+      <p><font size = 3>&emsp; &#9432 This section provides a visual representation of the social network and categories(labels) of entities</font></p>
+      <a href="#search">2. Entity Search</a><br>
+      <p><font size = 3>&emsp; &#9432 Find entities by putting in a combination of one or more of these: label, property, value.<br>&emsp;&emsp;Check the fuzzy match checkbox to allow approximate matches on the value of property<br>&emsp;&emsp;*Note: Exact match is case sensitive. If you wish to ignore case, please allow fuzzy search</font></p>
+      <a href="#cliques">3. Cliques</a><br>
+      <p><font size = 3>&emsp; &#9432 Find the subset of entities, such that any two distinct entities within the subset are related</font></p>
+      </font>
+  </div>
+  
+<h2 id="overview">1. Overview of Social Network</h2>
+<div class="float-container" style="padding-left: 20px; height:500px;">
+<div class="float-child" id="container" style="width: 45%; height:400px; float:left; padding: 20px; border: 1px solid grey;"></div>
+<div class="float-child" id="container2" style="width: 45%; height:250px; float:right; padding: 20px; border: 1px solid grey;"></div>
+</div>
+  <script >
+    anychart.onDocumentLoad(function() {
+      var chart = anychart.graph();
+      chart.data(data);
+      chart.title('Social Network - All entities');
+      var labels = chart.nodes().labels();
+      labels.enabled(true);
+      labels.format({{ id }});
+      labels.fontSize(20);
+      chart.container('container').draw();
+
+      // create pie chart with passed data
+      var data2 = {{ piedata|safe }};
+      chart2 = anychart.pie(data2);
+      chart2.title('Entity categories (Labels)')
+      chart2.container("container2");
+      chart2.draw();
+    });
+    var data = {{ graphstring|safe}};
+  </script>
+  <br>
+  <br><br>
+    <h2 id="search">2. Entity Search</h2>
+  <div style="position:relative; border:1px solid grey; padding:20px;">
+    <form action="/search" method="GET">
+    <!--SEARCH BY LABEL-->  
+      <label for="label">Search by Label</label>
+      <select id="label" name="label">
+        <option disabled selected hidden>Choose Label</option>
+        {% for l in labels %}
+        <option value={{l}}>{{l}}</option>
+        {% endfor %}
+      </select>
+      <br><br>
+    <!--SEARCH BY PROPERTY-->  
+      <label for="key">Search by value of a property</label>
+      <select id="key" name="key">
+        <option disabled selected hidden>Choose Property</option>
+        {% for k in keys %}
+        <option value={{k}}>{{k}}</option>
+        {% endfor %}
+      </select>
+     
+      <input type="text" name="value" placeholder="Enter Value">
+      
+      <input type="checkbox" id="match" name="match" value="fuzzy">
+      <label for="match">Fuzzy match</label>
+      <br><br>
+    
+      <input type="submit">
+    </form>
+    <br><br><br>
+    {% if res is defined %}
+    <script> 
+     window.location.href = "#search";
+    </script>
+    <div style="margin-right:10%;">
+    <font size=1>
+    <table>
+      <tr>
+        <th>Sr No</th>
+        <th>ID</th>
+        <th>Property-Value</th>
+        <th>Relationships</th>
+      </tr>
+        {% for r in res %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{r}}</td>
+          <td>{{props[loop.index0]}}</td>
+          <td>{{rels[loop.index0]}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </font>
+    </div>
+    {% endif %}
+    </div>
+    <br>
+    <br>
+    <h2 id="cliques">3. Cliques</h2>
+  <div style="border:1px solid grey; padding:20px;">
+    <p><font size=2>&#9432 A clique is a subset of entities, such that any two distinct entities within the subset are related</font></p>
+    <p>In our social network, entities with following IDs form a clique:</p>
+    {% for c in cliques %}
+      <p>{{loop.index}}. {{c}}</p>
+    {% endfor %}
+  </div>
+</body>
+</html>
