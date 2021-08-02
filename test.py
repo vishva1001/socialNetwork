@@ -6,7 +6,7 @@ except Exception as e:
 
 class FlaskTest(unittest2.TestCase):
     #Check for response 302
-    #reposnse 302 indicates found and redirected to other location
+    #reposnse 302 indicates route found and redirected to other location
     def test_index(self):
         tester = app.test_client(self)
         response = tester.get("/")
